@@ -13,7 +13,15 @@ export const readDir = async (directory) => {
       })
     );
 
-    return arr;
+    const sortedArr = arr.sort((a, b) => {
+      if (a.type !== b.type) {
+        return a.type === "Directory" ? -1 : 1;
+      }
+
+      return a.name < b.name ? -1 : 1;
+    });
+
+    return sortedArr;
   } catch (error) {
     console.log(error);
     return [];

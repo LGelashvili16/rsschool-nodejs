@@ -28,3 +28,13 @@ export const showFileOrDir = async (newPath) => {
     console.error(err);
   }
 };
+
+export const isDirectoryPath = async (newPath) => {
+  try {
+    const stats = await fs.lstat(newPath);
+
+    if (stats.isDirectory()) return true;
+  } catch (err) {
+    return false;
+  }
+};
