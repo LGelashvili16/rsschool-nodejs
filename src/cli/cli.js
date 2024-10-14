@@ -1,12 +1,7 @@
 import os from "node:os";
 import { exitProcess } from "../commands/exit.js";
 import { username } from "../index.js";
-import {
-  existsDir,
-  isDirectoryPath,
-  showCurrentDir,
-  showFileOrDir,
-} from "../utils/directoryUtils.js";
+import { existsDir, showCurrentDir } from "../utils/directoryUtils.js";
 import { showOutput } from "./output.js";
 import path from "node:path";
 import { readDir } from "../commands/ls.js";
@@ -14,7 +9,8 @@ import { readFromFile } from "../commands/readFromFile.js";
 import { createNewFile } from "../commands/createNewFile.js";
 import { renameFile } from "../commands/renameFile.js";
 import { copyUserFile } from "../commands/copyFile.js";
-import { providePaths } from "../utils/pathUtils.js";
+import { moveUserFile } from "../commands/moveFile.js";
+import { removeUserFile } from "../commands/removeFile.js";
 
 const homeDir = os.homedir();
 export let currentDir = os.homedir();
@@ -65,28 +61,15 @@ export const openCli = () => {
         await renameFile(userArgs, currentDir);
         break;
       case "cp":
-        if (userArgs.length < 2) {
-          showOutput("Please provide correct file_path and new_path!");
-          showCurrentDir(currentDir);
-        } else if (userArgs.length > 2) {
-          showOutput("Please do not use spaces in paths!");
-          showCurrentDir(currentDir);
-        } else {
-          const [filePath, copyToPath] = userArgs;
-          const copyFileSource = path.resolve(currentDir, filePath);
-          const copyFileDestination = path.resolve(currentDir, copyToPath);
-
-          const filename = path.basename(filePath);
-
-          const checkDirectory = await isDirectoryPath(copyFileDestination);
-          const defineDestination =
-            checkDirectory === "Directory"
-              ? path.resolve(copyFileDestination, filename)
-              : copyFileDestination;
-
-          copyUserFile(copyFileSource, defineDestination);
-          showCurrentDir(currentDir);
-        }
+        await copyUserFile(userArgs, currentDir);
+        break;
+      case "mv":
+        await copyUserFile(userArgs, currentDir);
+        await removeUserFile(userArgs, currentDir);
+        break;
+      case "rm":
+        await removeUserFile(userArgs, currentDir);
+        showCurrentDir(currentDir);
         break;
       case ".exit":
         exitProcess(username);
