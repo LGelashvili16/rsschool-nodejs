@@ -11,6 +11,7 @@ import { renameFile } from "../commands/renameFile.js";
 import { copyUserFile } from "../commands/copyFile.js";
 import { removeUserFile } from "../commands/removeFile.js";
 import { osCommandsHandler } from "../commands/operatingSystem.js";
+import { calcHash } from "../commands/calculateHash.js";
 
 const homeDir = os.homedir();
 export let currentDir = os.homedir();
@@ -71,12 +72,16 @@ export const openCli = () => {
         await removeUserFile(userArgs, currentDir);
         showCurrentDir(currentDir);
         break;
-      case ".exit":
-        exitProcess(username);
-        break;
       case "os":
         osCommandsHandler(...userArgs);
         showCurrentDir(currentDir);
+        break;
+      case "hash":
+        await calcHash(userArgs, currentDir);
+        showCurrentDir(currentDir);
+        break;
+      case ".exit":
+        exitProcess(username);
         break;
       default:
         showOutput("Invalid command. Please try again!");
