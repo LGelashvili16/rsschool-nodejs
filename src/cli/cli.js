@@ -9,8 +9,8 @@ import { readFromFile } from "../commands/readFromFile.js";
 import { createNewFile } from "../commands/createNewFile.js";
 import { renameFile } from "../commands/renameFile.js";
 import { copyUserFile } from "../commands/copyFile.js";
-import { moveUserFile } from "../commands/moveFile.js";
 import { removeUserFile } from "../commands/removeFile.js";
+import { osCommandsHandler } from "../commands/operatingSystem.js";
 
 const homeDir = os.homedir();
 export let currentDir = os.homedir();
@@ -74,8 +74,13 @@ export const openCli = () => {
       case ".exit":
         exitProcess(username);
         break;
+      case "os":
+        osCommandsHandler(...userArgs);
+        showCurrentDir(currentDir);
+        break;
       default:
         showOutput("Invalid command. Please try again!");
+        showCurrentDir(currentDir);
         break;
     }
   });
