@@ -12,6 +12,10 @@ import { copyUserFile } from "../commands/copyFile.js";
 import { removeUserFile } from "../commands/removeFile.js";
 import { osCommandsHandler } from "../commands/operatingSystem.js";
 import { calcHash } from "../commands/calculateHash.js";
+import {
+  compressFile,
+  decompressFile,
+} from "../commands/compressDecompressFile.js";
 
 const homeDir = os.homedir();
 export let currentDir = os.homedir();
@@ -78,6 +82,14 @@ export const openCli = () => {
         break;
       case "hash":
         await calcHash(userArgs, currentDir);
+        showCurrentDir(currentDir);
+        break;
+      case "compress":
+        await compressFile(userArgs, currentDir);
+        showCurrentDir(currentDir);
+        break;
+      case "decompress":
+        await decompressFile(userArgs, currentDir);
         showCurrentDir(currentDir);
         break;
       case ".exit":
